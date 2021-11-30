@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Groupie Tracker</title>
+    <style>
+        body {
+            background-color: #e7fff6;
+        }
+        #bands {
+        font-family: Arial, Helvetica, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+        }
+
+        #bands td, #bands th {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+
+        }
+
+        #bands tr:nth-child(even) {
+        background-color: #d5fced;}
+
+        #bands tr:hover {
+        background-color: rgb(166, 247, 183);}
+
+        #bands th {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        text-align: center;
+        background-color: #04AA6D;
+        color: white;
+    }
+    </style>
+
+</head>
+
+<body>
+    <br>
+    <input type="text" id="input" list="suggestions" onkeyup="search()" placeholder="Case sensitive search..." style="background-color: inherit">
+    <datalist id="suggestions" style="background-color: #e7fff6;">
+        {{range $i, $v := .}}
+        <option value="{{$v.Name}}">artist/band</option>
+        {{end}}
+        {{range $i, $v := .}}
+        <option value="{{$v.MemberString}}">members</option>
+        {{end}}
+        {{range $i, $v := .}}
+        <option value="{{$v.CreationDate}}">creation date</option>
+        {{end}}
+        {{range $i, $v := .}}
+        <option value="{{$v.FirstAlbum}}">first album</option>
+        {{end}}
+    </datalist>
+
+    <br><br>
+    <table id="bands" style="text-align:center">
+        <tr>
+            <th>ID</th>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Members</th>
+            <th>Creation Date</th>
+            <th>First Album Date</th>
+            <th>Concert Dates</th>
+        </tr>
+        {{range $i, $v := .}}
+        <tr>
+            <td>{{$v.Id}}</td>
+            <td><img src="{{$v.Image}}"></td>
+            <td id="artist/band: {{$v.Name}}">{{$v.Name}}</td>
+            <td id="members: {{$v.MemberString}}">{{$v.MemberString}}</td>
+            <td id="creation date: {{$v.CreationDate}}">{{$v.CreationDate}}</td>
+            <td id="first album: {{$v.FirstAlbum}}">{{$v.FirstAlbum}}</td>
+            <td id="concerts: {{$v.Relations}}"><pre>{{$v.Relations}}</pre></td>
+        </tr>
+        {{end}}
+    </table>
+
+    <script>
+        function search() {
+
+                // Declare variables
+                var input, filter, table, tr, tds, txtValue, members, concerts;
+                input = document.getElementById("input");
+                filter = input.value.toUpperCase();
+                table = document.getElementById("bands");
+                tr = table.getElementsByTagName("tr");
+
+                // Loop through all table rows, and hide those that don't match the search query
+                for (var i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[2];
+                td2 = tr[i].getElementsByTagName("td")[3];
+                td3 = tr[i].getElementsByTagName("td")[4];
+                td4 = tr[i].getElementsByTagName("td")[5];
+                td5 = tr[i].getElementsByTagName("td")[6];
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    txtValue2 = td2.textContent || td2.innerText;
+                    txtValue3 = td3.textContent || td3.innerText;
+                    txtValue4 = td4.textContent || td4.innerText;
+                    txtValue5 = td5.textContent || td5.innerText;
+                    if (txtValue.indexOf(input.value) > -1 || txtValue2.indexOf(input.value) > -1 || txtValue3.indexOf(input.value) > -1 || txtValue4.indexOf(input.value) > -1 || txtValue5.toUpperCase().indexOf(filter) > -1 
+                    || td.id.indexOf(input.value) > -1 || td2.id.indexOf(input.value) > -1 || td3.id.indexOf(input.value) > -1 || td4.id.indexOf(input.value) > -1 || td5.id.indexOf(input.value) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>
